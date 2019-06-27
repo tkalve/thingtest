@@ -1,6 +1,6 @@
 steps:
   - bash: |
       docker build . -t simstore-api:$(git rev-list -1 HEAD)
-    workingDirectory: packaged/backend/SimStore.Api
+    workingDirectory: packages/backend/SimStore.Api
     displayName: Build Docker image
     condition: and(succeeded(), eq(variables.updated, 'true'))
