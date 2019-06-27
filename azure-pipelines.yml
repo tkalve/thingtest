@@ -1,0 +1,62 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  Azure.ResourceGroupName: '{{#toAlphaNumericString repositoryName 50}}{{/toAlphaNumericString}}'
+  Azure.ServiceConnectionId: '{{ azureServiceConnectionId }}'
+  Azure.Location: 'northeurope'
+  ACR.Name: '{{#toAlphaNumericString repositoryName 46}}{{/toAlphaNumericString}}{{#shortGuid}}{{/shortGuid}}'
+
+  ACR.ImageName: '$(ACR.Name):$(Build.BuildId)'
+  ACR.FullName: '$(ACR.Name).azurecr.io'
+  Azure.CreateResources: 'false'
+  System.Debug: 'false'
+
+jobs:
+
+- job: CreateResources
+  displayName: Create required resources
+  condition: and(succeeded(), eq(variables['Azure.CreateResources'], 'true'))
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - task: AzureResourceGroupDeployment@2
+    displayName: 'Azure Deployment:Create Azure Container Registry'
+    inputs:
+      azureSubscription: '$(Azure.ServiceConnectionId)'
+      resourceGroupName: '$(Azure.ResourceGroupName)'
+      location: '$(Azure.Location)'
+      templateLocation: 'URL of the file'
+      csmFileLink: 'https://raw.githubusercontent.com/Microsoft/azure-pipelines-yaml/master/templates/resources/arm/acr.json'
+      overrideParameters: '-registryName "$(ACR.Name)" -registryLocation "$(Azure.Location)"'
+
+- job: BuildImage
+  displayName: Build
+  dependsOn: CreateResources
+  condition: or(succeeded(), ne(variables['Azure.CreateResources'], 'true'))
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - task: Docker@1
+    displayName: 'Build an image'
+    inputs:
+      azureSubscriptionEndpoint: '$(Azure.ServiceConnectionId)'
+      azureContainerRegistry: '$(ACR.FullName)'
+      imageName: '$(ACR.ImageName)'
+      command: build
+      dockerFile: '**/Dockerfile'
+
+  - task: Docker@1
+    displayName: 'Push an image'
+    inputs:
+      azureSubscriptionEndpoint: '$(Azure.ServiceConnectionId)'
+      azureContainerRegistry: '$(ACR.FullName)'
+      imageName: '$(ACR.ImageName)'
+      command: push
