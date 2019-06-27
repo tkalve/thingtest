@@ -9,6 +9,6 @@ trigger:
 jobs:
   - template: cicd/templates/build-component.job.yml
     parameters:
-      componentName: Studio
-      subPath: packages/studio
-      stepsTemplate: packages/studio/build.yml
+      componentName: Backend
+      subPath: packaged/backend
+      stepsTemplate: packages/backend/build.yml
