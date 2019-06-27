@@ -9,12 +9,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  dockerId: thingtest  # Replace with your Docker ID for Docker Hub or the admin user name for the Azure Container Registry
+  imageName: thingtest-api  # Replace with the name of the image you want to publish
+
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
+    docker build -t $(dockerId).azurecr.io/$(imageName) .
