@@ -1,18 +1,20 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - '*'
+    exclude:
+      - refs/tags/*
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+  - template: cicd/templates/build-component.job.yml
+    parameters:
+      componentName: Backend
+      subPath: packaged/backend
+      stepsTemplate: packages/backend/build.yml
 
-variables:
-  dockerId: thingtest  # Replace with your Docker ID for Docker Hub or the admin user name for the Azure Container Registry
-  imageName: thingtest-api  # Replace with the name of the image you want to publish
-
-steps:
-- script: |
-    docker build -t $(dockerId).azurecr.io/$(imageName) .
+  - template: cicd/templates/build-component.job.yml
+    parameters:
+      componentName: Studio
+      subPath: packages/studio
+      stepsTemplate: packages/studio/build.yml
