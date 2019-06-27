@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+    - master
+    - development
+    - feature/*
+    exclude:
+    - feature/old*
+  paths:
+    include:
+    - packages/backend/*
+
+variables:
+  dockerId: thingtest
+  imageName: thingtest-api
+
+steps:
+- script: |
+    docker build -t $(dockerId).azurecr.io/$(imageName) .
+    docker push $(dockerId).azurecr.io/$(imageName)
