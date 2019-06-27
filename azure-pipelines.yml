@@ -6,9 +6,9 @@ trigger:
     exclude:
       - refs/tags/*
 
-jobs:
-  - template: cicd/templates/build-component.job.yml
-    parameters:
-      componentName: Backend
-      subPath: packaged/backend
-      stepsTemplate: packages/backend/build.yml
+- task: Docker@1
+  inputs:
+    containerRegistry: 'thingtest.azurecr.io'
+    repository: 'thingtest-api'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
