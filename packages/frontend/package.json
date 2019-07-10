@@ -1,0 +1,40 @@
+{
+  "name": "thingtest-frontend",
+  "version": "1.0.0",
+  "description": "ThingTest 1982",
+  "main": "index.js",
+  "author": "Thomas Kalve <tkalve@pm.me>",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-typescript": "latest",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "jest": "^24.8.0",
+    "parcel-bundler": "^1.12.3",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1"
+  },
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "lint": "eslint --ext .ts,.tsx src/",
+    "lint:fix": "yarn lint --fix",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  }
+}

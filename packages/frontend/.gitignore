@@ -1,0 +1,12 @@
+/build
+/dist
+/tmp
+/node_modules
+
+.DS_Store
+.history
+.cache
+.idea
+
+yarn-debug.log*
+yarn-error.log*
