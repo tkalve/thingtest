@@ -14,11 +14,11 @@ steps:
     npm run install
     npm run build
   displayName: 'npm install and build'
-  workingDirectory: '$(System.DefaultWorkingDirectory)'/packages/frontend
+  workingDirectory: '$(System.DefaultWorkingDirectory)/packages/frontend'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'/packages/frontend
+    SourceFolder: '$(System.DefaultWorkingDirectory)/packages/frontend'
     Contents: |
       dist/*
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
